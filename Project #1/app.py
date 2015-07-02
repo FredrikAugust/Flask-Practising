@@ -8,6 +8,7 @@ from flask import url_for
 from flask import make_response
 from flask import request
 import json
+from options import DEFAULTS
 
 app = Flask(__name__)
 
@@ -24,9 +25,13 @@ def index():
 	data = get_data()
 	return render_template('index.html', saves = data)
 
+@app.route('/builder')
+def builder():
+	return render_template('builder.html', saves = get_data(), options = DEFAULTS)
+
 @app.route('/save', methods=['POST'])
 def save():
-	response = make_response(redirect(url_for('index')))
+	response = make_response(redirect(url_for('builder')))
 	data = get_data()
 	data.update(dict(request.form.items()))
 	response.set_cookie('person', json.dumps(dict(data)))

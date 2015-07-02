@@ -1,0 +1,51 @@
+{% extends 'template.html' %}
+
+{% block title %}Create your person{% endblock %}
+
+{% block body %}
+<h1>You are now designing: <i>{{ saves.get('name', '') }}</i></h1> <!-- Change name? Too lazy right now -->
+<form action='{{ url_for('save') }}' method='POST'>
+	<h4>Colors</h4>
+	{% for color in options['colors'] %}
+		<input type='radio' id='{{ color }}' name='colors' value='{{ color }}'
+			{% if saves.get('color') == color %} checked {% endif %}>
+		<label for='{{ color }}' style='background-color: {{color}}; color: white;'>{{color}}</label>
+	{% endfor %}
+
+	{% for category, items in options.items() %}
+		{% if category != 'colors' %}
+			<h4>{{ category.title() }}</h4>
+			
+			{% for option in items %}
+				<input type='radio' id='{{ option }}' name='{{ category }}' value='{{ option }}'
+					{% if saves.get(option) == option %} checked {% endif %}>
+				<label for='{{ option }}'>{{ option }}</label>
+			{% endfor %}
+		{% endif %}
+	{% endfor %}
+	<br><br>
+	<input type='submit' value='Update person'>
+</form>
+
+<hr>
+
+<h4>Saved items:</h4>
+
+<table style='width:30%;' border=1>
+	<thead>
+		<tr>
+			<th>Key</th>
+			<th>Value</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for item in saves.items() %}
+			<tr>
+				<td>{{ item[0].title() }}</td>
+				<td>{{ item[1].title() }}</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% endblock %}
