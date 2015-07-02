@@ -5,23 +5,26 @@
 {% block body %}
 <h1>You are now designing: <i>{{ saves.get('name', '') }}</i></h1> <!-- Change name? Too lazy right now -->
 <form action='{{ url_for('save') }}' method='POST'>
+	<h4>Name</h4>
+	<input name='name' value='{{ saves.get('name') }}'>
+
 	<h4>Colors</h4>
 	{% for color in options['colors'] %}
-		<input type='radio' id='{{ color }}' name='colors' value='{{ color }}'
-			{% if saves.get('color') == color %} checked {% endif %}>
-		<label for='{{ color }}' style='background-color: {{color}}; color: white;'>{{color}}</label>
+	<input type='radio' id='{{ color }}' name='colors' value='{{ color }}'
+		{% if saves.get('colors') == color %} checked {% endif %}>
+	<label for='{{ color }}' style='background-color: {{color}}; color: white;'>{{color}}</label>
 	{% endfor %}
 
 	{% for category, items in options.items() %}
-		{% if category != 'colors' %}
-			<h4>{{ category.title() }}</h4>
-			
-			{% for option in items %}
-				<input type='radio' id='{{ option }}' name='{{ category }}' value='{{ option }}'
-					{% if saves.get(option) == option %} checked {% endif %}>
-				<label for='{{ option }}'>{{ option }}</label>
-			{% endfor %}
-		{% endif %}
+	{% if category != 'colors' %}
+	<h4>{{ category.title() }}</h4>
+	
+	{% for option in items %}
+	<input type='radio' id='{{ option }}' name='{{ category }}' value='{{ option }}'
+		{% if saves.get(category) == option %} checked {% endif %}>
+	<label for='{{ option }}'>{{ option }}</label>
+	{% endfor %}
+	{% endif %}
 	{% endfor %}
 	<br><br>
 	<input type='submit' value='Update person'>
@@ -47,5 +50,7 @@
 		{% endfor %}
 	</tbody>
 </table>
+<hr>
+<a href='/delete'>Delete character</a>
 
 {% endblock %}

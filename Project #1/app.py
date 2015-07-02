@@ -7,10 +7,12 @@ from flask import redirect
 from flask import url_for
 from flask import make_response
 from flask import request
+from flask import flash
 import json
 from options import DEFAULTS
 
 app = Flask(__name__)
+app.secret_key = 'si734fop8q3w9f7eglkbpoqjwgqf3r80h!@(*#!@&%#$o8irygfhjbekfv]'
 
 def get_data():
 	try:
@@ -29,8 +31,16 @@ def index():
 def builder():
 	return render_template('builder.html', saves = get_data(), options = DEFAULTS)
 
+@app.route('/delete')
+def delete():
+	flash('Deleted character')
+	response = make_response(redirect(url_for('index')))
+	response.set_cookie('person', '', expires=0)
+	return response
+
 @app.route('/save', methods=['POST'])
 def save():
+	flash('Saved changes')
 	response = make_response(redirect(url_for('builder')))
 	data = get_data()
 	data.update(dict(request.form.items()))
